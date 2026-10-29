@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #FAFCFF;
+  --color-foreground: #171A24;
+  --color-card: #FDFEFF;
+  --color-card-foreground: #171A24;
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #171A24;
+  --color-muted: #F1F3F9;
+  --color-muted-foreground: #646975;
+  --color-border: #E0E3EA;
+  --color-input: #DBDEE6;
+  --color-ring: #7C9CFF;
+  --color-primary: #7C9CFF;
+  --color-primary-foreground: #0F1527;
+  --color-secondary: #EDF0F7;
+  --color-secondary-foreground: #252933;
+  --color-accent: #5EEAD4;
+  --color-accent-foreground: #031B17;
+  --color-destructive: #D33D2B;
+  --color-destructive-foreground: #FFFFFF;
+
+  --radius-sm: 0.35rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.7rem;
+  --radius-xl: 0.875rem;
+
+  --shadow-sm: 0 1px 2px #2328380a, 0 1px 3px #2328380f;
+  --shadow-md: 0 4px 12px #23283814, 0 2px 6px #2328380f;
+  --shadow-lg: 0 8px 28px #2328381f, 0 4px 10px #23283814;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  * {
+    border-color: var(--color-border);
+  }
+}
