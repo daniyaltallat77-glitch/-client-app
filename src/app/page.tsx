@@ -1,17 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ArrowRight, UserPlus } from "lucide-react";
+import { ArrowRight, Check, UserPlus, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
-const STATUS_FLOW: Record<string, string | null> = {
-  "New": "Contacted",
-  "Contacted": "Won",
-  "Won": null,
-  "Lost": null,
-};
 
 const STATUS_COLORS: Record<string, string> = {
   "New": "bg-blue-100 text-blue-800 border-blue-200",
@@ -56,13 +49,11 @@ export default function HomePage() {
     setNotes("");
   }
 
-  async function handleAdvance(id: string, currentStatus: string) {
-    const nextStatus = STATUS_FLOW[currentStatus];
-    if (!nextStatus) return;
+  async function handleSetStatus(id: string, newStatus: string) {
     const res = await fetch(`/api/leads/${id}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: nextStatus }),
+      body: JSON.stringify({ status: newStatus }),
     });
     const updated = await res.json();
     setLeads((prev) => prev.map((l) => (l.id === id ? updated : l)));
@@ -120,16 +111,36 @@ export default function HomePage() {
                       <p><span className="font-medium">Notes:</span> {lead.notes || "—"}</p>
                     </div>
                     <div className="pt-1">
-                      {STATUS_FLOW[lead.status] ? (
+                      {lead.status === "New" && (
                         <Button
                           size="sm"
                           variant="outline"
                           className="w-full text-xs gap-1.5"
-                          onClick={() => handleAdvance(lead.id, lead.status)}
+                          onClick={() => handleSetStatus(lead.id, "Contacted")}
                         >
-                          Advance <ArrowRight className="h-3 w-3" />
+                          Advance to Contacted <ArrowRight className="h-3 w-3" />
                         </Button>
-                      ) : (
+                      )}
+                      {lead.status === "Contacted" && (
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button
+                            size="sm"
+                            className="w-full text-xs gap-1.5"
+                            onClick={() => handleSetStatus(lead.id, "Won")}
+                          >
+                            Won <Check className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full text-xs gap-1.5 text-rose-700 hover:bg-rose-50"
+                            onClick={() => handleSetStatus(lead.id, "Lost")}
+                          >
+                            Lost <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      )}
+                      {(lead.status === "Won" || lead.status === "Lost") && (
                         <p className="text-[10px] text-center text-muted-foreground">Final status</p>
                       )}
                     </div>
